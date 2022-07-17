@@ -49,7 +49,7 @@ const DefaultLayout = ({ children }: DefaultLayout) => {
             <Button<'a'>
               component="a"
               target="_blank"
-              href="https://github.com/hasan-almujtaba/next-starter"
+              href="https://github.com/hasan-almujtaba/redux-form"
               leftIcon={<BsGithub />}
             >
               View on Github
@@ -90,7 +90,7 @@ const DefaultLayout = ({ children }: DefaultLayout) => {
             >
               <Button<'a'>
                 component="a"
-                href="https://github.com/hasan-almujtaba/next-starter"
+                href="https://github.com/hasan-almujtaba/redux-form"
                 variant="subtle"
                 leftIcon={<BsGithub />}
                 sx={() => ({
