@@ -4,7 +4,7 @@ Form handling with RTK Implementation
 
 ## Live Demo
 
-[Live Demo](https://redux-form-h.netlify.app)
+[Live Demo](https://redux-form-h.vercel.app)
 
 ## Usage
 
