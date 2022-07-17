@@ -3,7 +3,7 @@ import type { Education, User, Experience } from '@/types/user'
 
 export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://hr.ekrut.co',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
   }),
   endpoints: (builder) => ({
     storeUser: builder.mutation<User, Partial<User>>({
