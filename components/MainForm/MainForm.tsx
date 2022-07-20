@@ -138,31 +138,46 @@ const MainForm = () => {
    */
   const educationForm = form.values.educations.map((item, index) => (
     <Grid key={index}>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <TextInput
           label="School"
           {...form.getListInputProps('educations', index, 'school')}
         />
       </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <TextInput
           label="Major"
           {...form.getListInputProps('educations', index, 'major')}
         />
       </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <DatePicker
           label="Start Date"
           {...form.getListInputProps('educations', index, 'startDate')}
         />
       </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <DatePicker
           label="End Date"
           {...form.getListInputProps('educations', index, 'endDate')}
         />
       </Grid.Col>
-      <Grid.Col span={12}>
+      <Grid.Col
+        sm={12}
+        lg={12}
+      >
         {form.values.educations.length > 1 && (
           <Button
             color="red"
@@ -181,31 +196,46 @@ const MainForm = () => {
    */
   const experienceForm = form.values.educations.map((item, index) => (
     <Grid key={index}>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <TextInput
           label="Company"
           {...form.getListInputProps('experiences', index, 'company')}
         />
       </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <TextInput
           label="Title"
           {...form.getListInputProps('experiences', index, 'title')}
         />
       </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <DatePicker
           label="Start Date"
           {...form.getListInputProps('experiences', index, 'startDate')}
         />
       </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col
+        sm={12}
+        lg={6}
+      >
         <DatePicker
           label="End Date"
           {...form.getListInputProps('experiences', index, 'endDate')}
         />
       </Grid.Col>
-      <Grid.Col span={12}>
+      <Grid.Col
+        sm={12}
+        lg={12}
+      >
         {form.values.educations.length > 1 && (
           <Button
             color="red"

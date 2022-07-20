@@ -2,7 +2,10 @@ import { createStyles } from '@mantine/core'
 
 const useStyles = createStyles((theme) => ({
   container: {
-    width: '800px',
+    width: '100%',
+    [theme.fn.largerThan('md')]: {
+      width: '800px',
+    },
     margin: '0 auto',
   },
 
