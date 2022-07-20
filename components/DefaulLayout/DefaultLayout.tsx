@@ -13,25 +13,30 @@ import {
 import { DefaultLayout } from '../../types/layout'
 import { BsSunFill, BsMoonFill, BsGithub } from 'react-icons/bs'
 import Link from 'next/link'
+import ActionButton from '../ActionButton/ActionButton'
+import useStyles from './DefaultLayout.styles'
 
 const DefaultLayout = ({ children }: DefaultLayout) => {
   /**
+   * Component styles
+   */
+  const { classes } = useStyles()
+
+  /**
    * Use mantine theme and color scheme
    */
-  const { colors } = useMantineTheme()
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
 
   /**
-   * Toggle Navbar visibility
+   * Icon for toggle dark mode button
    */
-  const [opened, setOpened] = useState(false)
+  const themeIcon =
+    colorScheme === 'dark' ? <BsSunFill size="18" /> : <BsMoonFill size="18" />
 
   return (
     <AppShell
-      styles={{
-        main: {
-          background: colorScheme === 'dark' ? colors.dark[8] : colors.gray[0],
-        },
+      classNames={{
+        main: classes.main,
       }}
       navbarOffsetBreakpoint="xl"
       fixed
@@ -40,57 +45,29 @@ const DefaultLayout = ({ children }: DefaultLayout) => {
           height={70}
           p="md"
         >
-          <div
-            style={{ display: 'flex', alignItems: 'center', height: '100%' }}
-          >
-            <MediaQuery
-              largerThan="md"
-              styles={{ display: 'none' }}
-            >
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery>
-
+          <div className={classes.header}>
             <Link href="/">
-              <Text sx={() => ({ cursor: 'pointer' })}>Redux Form</Text>
+              <Text>Redux Form</Text>
             </Link>
 
-            <div style={{ flexGrow: 1 }}></div>
+            <div className={classes.spacer}></div>
 
-            <MediaQuery
-              smallerThan="lg"
-              styles={{ display: 'none' }}
-            >
-              <Button<'a'>
-                component="a"
-                href="https://github.com/hasan-almujtaba/redux-form"
-                variant="subtle"
-                leftIcon={<BsGithub />}
-                sx={() => ({
-                  marginRight: '10px',
-                })}
+            <div className={classes.actionGroup}>
+              <ActionButton
+                tooltip="Source Code"
+                link="https://github.com/hasan-almujtaba/redux-form"
                 target="_blank"
               >
-                View on Github
-              </Button>
-            </MediaQuery>
+                {<BsGithub size="18" />}
+              </ActionButton>
 
-            <Button
-              variant="subtle"
-              color={colorScheme === 'dark' ? 'yellow' : 'dark'}
-              onClick={() => toggleColorScheme()}
-            >
-              {colorScheme === 'dark' ? (
-                <BsSunFill size="24" />
-              ) : (
-                <BsMoonFill size="24" />
-              )}
-            </Button>
+              <ActionButton
+                tooltip="Toggle dark mode"
+                onClick={() => toggleColorScheme()}
+              >
+                {themeIcon}
+              </ActionButton>
+            </div>
           </div>
         </Header>
       }
