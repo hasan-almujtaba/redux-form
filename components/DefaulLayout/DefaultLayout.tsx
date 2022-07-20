@@ -35,28 +35,6 @@ const DefaultLayout = ({ children }: DefaultLayout) => {
       }}
       navbarOffsetBreakpoint="xl"
       fixed
-      navbar={
-        <Navbar
-          p="md"
-          hiddenBreakpoint="xl"
-          hidden={!opened}
-          width={{ sm: 200, lg: 300 }}
-        >
-          <MediaQuery
-            largerThan="md"
-            styles={{ display: 'none' }}
-          >
-            <Button<'a'>
-              component="a"
-              target="_blank"
-              href="https://github.com/hasan-almujtaba/redux-form"
-              leftIcon={<BsGithub />}
-            >
-              View on Github
-            </Button>
-          </MediaQuery>
-        </Navbar>
-      }
       header={
         <Header
           height={70}
