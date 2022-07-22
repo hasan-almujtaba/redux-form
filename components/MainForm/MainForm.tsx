@@ -1,5 +1,4 @@
-import { Button, Divider, Grid, TextInput } from '@mantine/core'
-import { DatePicker } from '@mantine/dates'
+import { Button, TextInput } from '@mantine/core'
 import { useForm, formList } from '@mantine/form'
 import { randomId } from '@mantine/hooks'
 import {
@@ -10,6 +9,7 @@ import {
 import useStyles from './MainForm.styles'
 import { showNotification } from '@mantine/notifications'
 import { useState } from 'react'
+import DynamicForm from '../DynamicForm/DynamicForm'
 
 const MainForm = () => {
   /**
@@ -98,156 +98,49 @@ const MainForm = () => {
    */
   const onFormSubmit = async (values: typeof form.values) => {
     setLoading(true)
-    const user = {
-      fullname: values.fullName,
-      email: values.email,
-      phone: values.phone,
+
+    try {
+      const user = {
+        fullname: values.fullName,
+        email: values.email,
+        phone: values.phone,
+      }
+      const userResponse = await storeUser(user).unwrap()
+
+      if (userResponse) {
+        const educations = values.educations.map((education) => ({
+          school: education.school,
+          major: education.major,
+          start_date: education.startDate,
+          end_date: education.endDate,
+          user_id: userResponse.id as number,
+        }))
+        await storeEducation(educations)
+
+        const experiences = values.experiences.map((experience) => ({
+          company: experience.company,
+          title: experience.title,
+          start_date: experience.startDate,
+          end_date: experience.endDate,
+          user_id: userResponse.id as number,
+        }))
+        await storeExperience(experiences).unwrap()
+
+        setLoading(false)
+        form.reset()
+        showNotification({
+          title: 'Success',
+          message: 'Data submitted',
+        })
+      }
+    } catch (error) {
+      setLoading(false)
+      showNotification({
+        title: 'Failed',
+        message: 'something wrong happened please try again later',
+      })
     }
-    const userResponse = await storeUser(user).unwrap()
-
-    if (userResponse) {
-      const educations = values.educations.map((education) => ({
-        school: education.school,
-        major: education.major,
-        start_date: education.startDate,
-        end_date: education.endDate,
-        user_id: userResponse.id as number,
-      }))
-      await storeEducation(educations).unwrap()
-
-      const experiences = values.experiences.map((experience) => ({
-        company: experience.company,
-        title: experience.title,
-        start_date: experience.startDate,
-        end_date: experience.endDate,
-        user_id: userResponse.id as number,
-      }))
-      await storeExperience(experiences).unwrap()
-    }
-
-    setLoading(false)
-    form.reset()
-    showNotification({
-      title: 'Success',
-      message: 'Data submitted',
-    })
   }
-
-  /**
-   * Dynamic education form
-   */
-  const educationForm = form.values.educations.map((item, index) => (
-    <Grid key={index}>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <TextInput
-          label="School"
-          {...form.getListInputProps('educations', index, 'school')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <TextInput
-          label="Major"
-          {...form.getListInputProps('educations', index, 'major')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <DatePicker
-          label="Start Date"
-          {...form.getListInputProps('educations', index, 'startDate')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <DatePicker
-          label="End Date"
-          {...form.getListInputProps('educations', index, 'endDate')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={12}
-      >
-        {form.values.educations.length > 1 && (
-          <Button
-            color="red"
-            onClick={() => onRemoveButtonClick('educations', index)}
-          >
-            Remove
-          </Button>
-        )}
-        <Divider my="xs" />
-      </Grid.Col>
-    </Grid>
-  ))
-
-  /**
-   * Dynamic experience form
-   */
-  const experienceForm = form.values.educations.map((item, index) => (
-    <Grid key={index}>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <TextInput
-          label="Company"
-          {...form.getListInputProps('experiences', index, 'company')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <TextInput
-          label="Title"
-          {...form.getListInputProps('experiences', index, 'title')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <DatePicker
-          label="Start Date"
-          {...form.getListInputProps('experiences', index, 'startDate')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={6}
-      >
-        <DatePicker
-          label="End Date"
-          {...form.getListInputProps('experiences', index, 'endDate')}
-        />
-      </Grid.Col>
-      <Grid.Col
-        sm={12}
-        lg={12}
-      >
-        {form.values.educations.length > 1 && (
-          <Button
-            color="red"
-            onClick={() => onRemoveButtonClick('educations', index)}
-          >
-            Remove
-          </Button>
-        )}
-        <Divider my="xs" />
-      </Grid.Col>
-    </Grid>
-  ))
 
   return (
     <form
@@ -260,51 +153,34 @@ const MainForm = () => {
           <TextInput
             label="Full Name"
             {...form.getInputProps('fullName')}
+            required
           />
           <TextInput
             label="Email"
             {...form.getInputProps('email')}
+            required
           />
           <TextInput
             label="Phone"
             {...form.getInputProps('phone')}
+            required
           />
         </div>
       </div>
 
-      <div>
-        <div className={classes.title}>Education</div>
+      <DynamicForm
+        form={form}
+        onRemoveButtonClick={onRemoveButtonClick}
+        onAddButtonClick={onAddButtonClick}
+        groupType="educations"
+      />
 
-        <div className={classes.formGroup}>
-          {educationForm}
-          <div className={classes.addNewWrapper}>
-            <Button
-              onClick={() => onAddButtonClick('educations')}
-              color="teal"
-              className={classes.addNew}
-            >
-              Add New
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div className={classes.title}>Experience</div>
-
-        <div className={classes.formGroup}>
-          {experienceForm}
-          <div className={classes.addNewWrapper}>
-            <Button
-              onClick={() => onAddButtonClick('experiences')}
-              color="teal"
-              className={classes.addNew}
-            >
-              Add New
-            </Button>
-          </div>
-        </div>
-      </div>
+      <DynamicForm
+        form={form}
+        onRemoveButtonClick={onRemoveButtonClick}
+        onAddButtonClick={onAddButtonClick}
+        groupType="experiences"
+      />
 
       <Button
         type="submit"
